@@ -1,1 +1,146 @@
-Welcome to myMovie App! This is a searchable database of my favorite movies!
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <style>
+      table,
+      th,
+      td {
+        border: 1px solid black;
+      }
+    </style>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>My_Movies_App</title>
+  </head>
+
+  <body>
+    <h2>URL Endpoints</h2>
+    <table style="width: 100%">
+      <colgroup>
+        <col span="1" style="width: 25%;" />
+        <col span="1" style="width: 15%;" />
+        <col span="1" style="width: 5%;" />
+        <col span="1" style="width: 15%;" />
+        <col span="1" style="width: 20%;" />
+        <col span="1" style="width: 20%;" />
+      </colgroup>
+      <tr>
+        <th>Request</th>
+        <th>URL</th>
+        <th>Method</th>
+        <th>Params</th>
+        <th>Request Body Data Format</th>
+        <th>Response Body Data Format</th>
+      </tr>
+      <tr>
+        <td>Return a list of ALL movies to the user</td>
+        <td>/movies</td>
+        <td>GET</td>
+        <td></td>
+        <td>None</td>
+        <td>A JSON object holding data about all movies in the movies array</td>
+      </tr>
+      <tr>
+        <td>
+          Return data (description, genre, director, image URL, whether it’s
+          featured or not) about a single movie by title to the user
+        </td>
+        <td>/movies/:title</td>
+        <td>GET</td>
+        <td></td>
+        <td>None</td>
+        <td>A JSON holding data about a single movie by title</td>
+      </tr>
+      <tr>
+        <td>
+          Return data about a genre (description) by name/title (e.g.,
+          “Thriller”)
+        </td>
+        <td>/movies/genre/:genreName</td>
+        <td>GET</td>
+        <td></td>
+        <td>None</td>
+        <td>A JSON holding data about the genre by name/title</td>
+      </tr>
+      <tr>
+        <td>
+          Return data about a director (bio, birth year, death year) by name
+        </td>
+        <td>/movies/director/:directorName</td>
+        <td>GET</td>
+        <td></td>
+        <td>None</td>
+        <td>A JSON holding data about the director</td>
+      </tr>
+      <tr>
+        <td>Allow new users to register</td>
+        <td>/users</td>
+        <td>POST</td>
+        <td></td>
+        <td>
+          A JSON object holding data about the new user<br />
+          { <br />name: "BC",<br />
+          birthday: "5/5/15",<br />
+          email: "BC@email.com"<br />
+          }
+        </td>
+        <td>
+          A JSON object holding data about the new user was added, including an
+          ID:<br />
+          { <br />id: 4, <br />
+          name: "BC",<br />
+          birthday: "5/5/15",<br />
+          email: "BC@email.com"<br />
+          }
+        </td>
+      </tr>
+      <tr>
+        <td>Allow users to update their user info (username)</td>
+        <td>/users/:id</td>
+        <td>PUT</td>
+        <td></td>
+        <td>None</td>
+        <td>A text message indicating their profile has beeen updated</td>
+      </tr>
+      <tr>
+        <td>
+          Allow users to add a movie to their list of favorites (showing only a
+          text that a movie has been added—more on this later)
+        </td>
+        <td>/users/:id/:movieTitle</td>
+        <td>PUT</td>
+        <td></td>
+        <td>None</td>
+        <td>
+          A text message indicating that a movie has been added to their Movies
+          List
+        </td>
+      </tr>
+      <tr>
+        <td>
+          Allow users to remove a movie from their list of favorites (showing
+          only a text that a movie has been removed—more on this later)>
+        </td>
+        <td>/users/:id/:movieTitle</td>
+        <td>PUT</td>
+        <td></td>
+        <td>None</td>
+        <td>
+          A text message indicating that a movie has been removed from their
+          Movies List
+        </td>
+      </tr>
+      <tr>
+        <td>
+          Allow existing users to deregister (showing only a text that a user
+          email has been removed—more on this later)
+        </td>
+        <td>/users/:id</td>
+        <td>DELETE</td>
+        <td></td>
+        <td>None</td>
+        <td>A text message indicating that their profile has been removed</td>
+      </tr>
+    </table>
+  </body>
+</html>
