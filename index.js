@@ -3,7 +3,7 @@ const express = require("express"),
 
 const app = express();
 
-let topMovies = [
+let Movies = [
   {
     title: "Top Gun",
     director: "Tony Scott"
@@ -48,7 +48,7 @@ let topMovies = [
 
 // GET requests
 app.get("/movies", (req, res) => {
-  res.send(topMovies);
+  res.send(movies);
 });
 app.get("/", (req, res) => {
   res.send("These are my favorite movies!");
