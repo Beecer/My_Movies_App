@@ -24,7 +24,7 @@ app.get("/", (req, res) => {
   res.send("hello world!!");
 });
 
-//Create New User Registration // NO Success
+//Create New User Registration // Success
 /* Expected JSON Format
 {
   ID: Integer,
