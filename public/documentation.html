@@ -33,10 +33,18 @@
         <th>Response Body Data Format</th>
       </tr>
       <tr>
+        <td>Return a list of ALL users</td>
+        <td>/users</td>
+        <td>GET</td>
+        <td>None</td>
+        <td>None</td>
+        <td>A JSON object holding data about all users in the users array</td>
+      </tr>
+      <tr>
         <td>Return a list of ALL movies to the user</td>
         <td>/movies</td>
         <td>GET</td>
-        <td></td>
+        <td>None</td>
         <td>None</td>
         <td>A JSON object holding data about all movies in the movies array</td>
       </tr>
@@ -47,8 +55,8 @@
         </td>
         <td>/movies/:title</td>
         <td>GET</td>
-        <td></td>
-        <td>None</td>
+        <td>Movie Title</td>
+        <td>{Title: req.params.Title}</td>
         <td>A JSON holding data about a single movie by title</td>
       </tr>
       <tr>
@@ -56,64 +64,63 @@
           Return data about a genre (description) by name/title (e.g.,
           “Thriller”)
         </td>
-        <td>/movies/genre/:genreName</td>
+        <td>/movies/genre/:Name</td>
         <td>GET</td>
-        <td></td>
-        <td>None</td>
+        <td>Genre Name</td>
+        <td>{ "Genre.Name": req.params.Name }</td>
         <td>A JSON holding data about the genre by name/title</td>
       </tr>
       <tr>
         <td>
           Return data about a director (bio, birth year, death year) by name
         </td>
-        <td>/movies/director/:directorName</td>
+        <td>/movies/director/:Name</td>
         <td>GET</td>
-        <td></td>
-        <td>None</td>
+        <td>Director Name</td>
+        <td>{ "Director.Name": req.params.Name }</td>
         <td>A JSON holding data about the director</td>
       </tr>
       <tr>
         <td>Allow new users to register</td>
         <td>/users</td>
         <td>POST</td>
-        <td></td>
+        <td>Username, Password, Email, Birthday</td>
         <td>
-          A JSON object holding data about the new user<br />
-          { <br />name: "BC",<br />
-          birthday: "5/5/15",<br />
-          email: "BC@email.com"<br />
-          }
+          { UserName: Integer, Password: String, Email: String, Birthday: Date }
         </td>
         <td>
           A JSON object holding data about the new user was added, including an
-          ID:<br />
-          { <br />id: 4, <br />
-          name: "BC",<br />
-          birthday: "5/5/15",<br />
-          email: "BC@email.com"<br />
-          }
+          { ID: Integer, UserName: Integer, Password: String, Email: String,
+          Birthday: Date }
         </td>
       </tr>
       <tr>
         <td>Allow users to update their user info (username)</td>
-        <td>/users/:id</td>
+        <td>/users/:Username</td>
         <td>PUT</td>
-        <td></td>
+        <td>Username</td>
         <td>None</td>
-        <td>A text message indicating their profile has beeen updated</td>
+        <td>
+          A JSON object holding data the updated user info { ID: Integer,
+          UserName: Integer, Password: String, Email: String, Birthday: Date }d
+        </td>
       </tr>
       <tr>
         <td>
           Allow users to add a movie to their list of favorites (showing only a
           text that a movie has been added—more on this later)
         </td>
-        <td>/users/:id/:movieTitle</td>
-        <td>PUT</td>
-        <td></td>
-        <td>None</td>
+        <td>/users/:Username/movies/:movieID</td>
+        <td>POST</td>
+        <td>Username</td>
+        <td>{ { "Name": "Brandon", "FavoriteMovies": "movieID" }</td>
+
         <td>
-          A text message indicating that a movie has been added to their Movies
-          List
+          { "_id": "6205db3d1c46d3c446b9d6a8", "Username": "Brandon", "Email":
+          "Brandon12@mail.com", "Password": "Password2", "Birthday":
+          "1980-01-01T00:00:00.000Z", "FavoriteMovies": [
+          "61fb22078479d686de683a95", "61fb22078479d686de683a93",
+          "61fb22078479d686de683a92" ] }
         </td>
       </tr>
       <tr>
@@ -121,13 +128,14 @@
           Allow users to remove a movie from their list of favorites (showing
           only a text that a movie has been removed—more on this later)>
         </td>
-        <td>/users/:id/:movieTitle</td>
-        <td>PUT</td>
-        <td></td>
+        <td>/users/:Username/movies/:movieID</td>
+        <td>DELETE</td>
+        <td>Username, MovieID</td>
         <td>None</td>
+        { UserName: req.params.Username }, { $pull: { FavoriteMovies:
+        req.params.movieID } }
         <td>
-          A text message indicating that a movie has been removed from their
-          Movies List
+          A JSON object holding data about the user with the movie removed
         </td>
       </tr>
       <tr>
@@ -135,11 +143,21 @@
           Allow existing users to deregister (showing only a text that a user
           email has been removed—more on this later)
         </td>
-        <td>/users/:id</td>
+        <td>/users/:Username</td>
         <td>DELETE</td>
-        <td></td>
+        <td>Username</td>
         <td>None</td>
         <td>A text message indicating that their profile has been removed</td>
+      </tr>
+      <tr>
+        <td>
+          Return data about a user
+        </td>
+        <td>/users/:Username</td>
+        <td>GET</td>
+        <td>Username</td>
+        <td>None</td>
+        <td>JSON object holding data about the user</td>
       </tr>
     </table>
   </body>
