@@ -6,6 +6,7 @@ const morgan = require("morgan");
 const app = express();
 const mongoose = require("mongoose");
 const Models = require("./models.js");
+const { check, validationResult } = require("express-validator");
 
 const Movies = Models.Movie;
 const Users = Models.User;
@@ -17,6 +18,9 @@ mongoose.connect("mongodb://localhost:27017/myMoviesAppDB", {
 
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
+
+const cors = require("cors");
+app.use(cors());
 
 //Import auth.js file //(app) ensures Express is available as well
 let auth = require("./auth")(app);
@@ -40,38 +44,76 @@ app.get("/", (req, res) => {
   Email: String,
   Birthday: Date
 }*/
-app.post("/users", (req, res) => {
-  Users.findOne({ Username: req.body.Username })
-    .then(user => {
-      if (user) {
-        return res.status(400).send(req.body.Username + " already exists");
-      } else {
-        Users.create({
-          Username: req.body.Username,
-          Email: req.body.Email,
-          Password: req.body.Password,
-          Birthday: req.body.Birthday
-        })
-          .then(user => {
-            res.status(201).json(user);
+app.post(
+  "/users",
+  [
+    check("Username", "Username is required").isLength({ min: 5 }),
+    check(
+      "Username",
+      "Username contains non alphanumeric characters - not allowed."
+    ).isAlphanumeric(),
+    check("Password", "Password is required")
+      .not()
+      .isEmpty(),
+    check("Email", "Email is not valid").isEmail()
+  ],
+  (req, res) => {
+    //Check validation for errors
+    let errors = validationResult(req);
+
+    if (!errors.isEmpty()) {
+      return res.status(422).json({ error: errors.array() });
+    }
+    let hashedPassword = Users.hashPassword(req.body.Password);
+    Users.findOne({ Username: req.body.Username })
+      .then(user => {
+        if (user) {
+          return res.status(400).send(req.body.Username + " already exists");
+        } else {
+          Users.create({
+            Username: req.body.Username,
+            Email: req.body.Email,
+            Password: hashedPassword,
+            Birthday: req.body.Birthday
           })
-          .catch(error => {
-            console.error(error);
-            res.status(500).send("Error: " + error);
-          });
-      }
-    })
-    .catch(error => {
-      console.error(err);
-      res.status(500).send("Error: " + error);
-    });
-});
+            .then(user => {
+              res.status(201).json(user);
+            })
+            .catch(error => {
+              console.error(error);
+              res.status(500).send("Error: " + error);
+            });
+        }
+      })
+      .catch(error => {
+        console.error(err);
+        res.status(500).send("Error: " + error);
+      });
+  }
+);
 
 // UPDATE User Info // Success
 app.put(
   "/users/:Username",
   passport.authenticate("jwt", { session: false }),
+  [
+    check("Username", "Username is required").isLength({ min: 5 }),
+    check(
+      "Username",
+      "Username contains non alphanumeric characters - not allowed."
+    ).isAlphanumeric(),
+    check("Password", "Password is required")
+      .not()
+      .isEmpty(),
+    check("Email", "Email is not valid").isEmail()
+  ],
   (req, res) => {
+    //Check validation object for errors
+    let errors = validationResult(req);
+
+    if (!errors.isEmpty()) {
+      return res.status(422).json({ errors: error.array() });
+    }
     Users.findOneAndUpdate(
       { Username: req.params.Username },
       {
@@ -257,6 +299,7 @@ app.delete(
   }
 );
 
-app.listen(8080, () => {
-  console.log("Your app is listening on ports 8080");
+const port = process.env.PORT || 8080;
+app.listen(port, "0.0.0.0", () => {
+  console.log("Listening on Port " + port);
 });
