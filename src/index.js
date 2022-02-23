@@ -1,6 +1,5 @@
 const express = require("express"),
-  bodyParser = require("body-parser"),
-  uuid = require("uuid");
+  bodyParser = require("body-parser");
 
 const morgan = require("morgan");
 const app = express();
@@ -10,12 +9,10 @@ const { check, validationResult } = require("express-validator");
 
 const Movies = Models.Movie;
 const Users = Models.User;
-/*
-mongoose.connect("mongodb://localhost:27017/myMoviesAppDB", {
-  useNewUrlParser: true,
-  useUnifiedTopology: true
-});
-*/
+
+const connectionUri =
+  process.env.CONNECTION_URI || "mongodb://localhost:27017/myMoviesAppDB";
+
 mongoose.connect(process.env.CONNECTION_URI, {
   useNewUrlParser: true,
   useUnifiedTopology: true
@@ -26,8 +23,8 @@ app.use(bodyParser.urlencoded({ extended: true }));
 const cors = require("cors");
 app.use(cors());
 
-//Import auth.js file //(app) ensures Express is available as well
-let auth = require("./auth")(app);
+//Import auth.js file //(app) ensures Express is Savailable as well
+require("./auth")(app);
 
 //Require the passport module //Import passport.js
 const passport = require("passport");
@@ -90,7 +87,7 @@ app.post(
         }
       })
       .catch(error => {
-        console.error(err);
+        console.error(error);
         res.status(500).send("Error: " + error);
       });
   }
@@ -116,14 +113,14 @@ app.put(
     let errors = validationResult(req);
 
     if (!errors.isEmpty()) {
-      return res.status(422).json({ errors: error.array() });
+      return res.status(422).json({ errors: errors.array() });
     }
     Users.findOneAndUpdate(
       { Username: req.params.Username },
       {
         $set: {
           Username: req.body.Username,
-          Password: req.body.Password,
+          Password: hashedPassword,
           Email: req.body.Email,
           Birthday: req.body.Birthday
         }
