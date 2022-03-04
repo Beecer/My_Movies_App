@@ -13,7 +13,7 @@ const Users = Models.User;
 const connectionUri =
   process.env.CONNECTION_URI || "mongodb://localhost:27017/myMoviesAppDB";
 
-mongoose.connect(process.env.CONNECTION_URI, {
+mongoose.connect(connectionUri, {
   useNewUrlParser: true,
   useUnifiedTopology: true
 });
@@ -158,7 +158,7 @@ app.get(
 // READ list of movies // Success
 app.get(
   "/movies",
-  /*passport.authenticate("jwt", { session: false }),*/
+  passport.authenticate("jwt", { session: false }),
   (req, res) => {
     Movies.find()
       .then(movies => {
