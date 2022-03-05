@@ -20,6 +20,8 @@ mongoose.connect(connectionUri, {
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 
+let allowedOrigins = ["http://localhost:1234", "http://localhost:8080"];
+
 const cors = require("cors");
 app.use(cors());
 
