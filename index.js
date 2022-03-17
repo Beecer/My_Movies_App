@@ -17,13 +17,15 @@ mongoose.connect(connectionUri, {
   useNewUrlParser: true,
   useUnifiedTopology: true
 });
+
+const cors = require("cors");
+app.use(cors());
+
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 
 //let allowedOrigins = ["http://localhost:1234", "http://localhost:8080"];
 
-const cors = require("cors");
-app.use(cors());
 
 //Import auth.js file //(app) ensures Express is Savailable as well
 let auth =require("./auth")(app);
