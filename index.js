@@ -26,7 +26,7 @@ const cors = require("cors");
 app.use(cors());
 
 //Import auth.js file //(app) ensures Express is Savailable as well
-require("./auth")(app);
+let auth =require("./auth")(app);
 
 //Require the passport module //Import passport.js
 const passport = require("passport");
@@ -160,7 +160,7 @@ app.get(
 // READ list of movies // Success
 app.get(
   "/movies",
-  /*passport.authenticate("jwt", { session: false }),*/
+  passport.authenticate("jwt", { session: false }),
   (req, res) => {
     Movies.find()
       .then(movies => {
