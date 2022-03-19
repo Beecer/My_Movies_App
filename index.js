@@ -23,7 +23,9 @@ app.use(bodyParser.urlencoded({ extended: true }));
 
 //let allowedOrigins = ["http://localhost:1234", "http://localhost:8080"];
 const cors = require('cors');
-app.use(cors());
+app.use(cors(
+  origin: '*',
+));
 
 //Import auth.js file //(app) ensures Express is Savailable as well
 let auth =require("./auth")(app);
