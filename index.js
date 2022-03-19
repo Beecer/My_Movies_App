@@ -23,11 +23,11 @@ mongoose.connect(connectionUri, {
 const cors = require('cors');
 app.use(cors());
 
-//Import auth.js file //(app) ensures Express is Savailable as well
-let auth =require("./auth")(app);
-
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
+
+//Import auth.js file //(app) ensures Express is Savailable as well
+let auth =require("./auth")(app);
 
 
 //Require the passport module //Import passport.js
