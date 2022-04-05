@@ -127,7 +127,7 @@ app.put(
           Username: req.body.Username,
           Password: hashedPassword,
           Email: req.body.Email,
-          Birthday: req.body.Birthday
+          //Birthday: req.body.Birthday
         }
       },
       { new: true }, // This line makes sure that the updated document is returned
